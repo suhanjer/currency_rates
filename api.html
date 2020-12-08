@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>USD conversion</title>
+        <script>            
+
+            document.addEventListener('DOMContentLoaded', () => {
+
+                fetch('https://api.exchangeratesapi.io/latest?base=USD')
+                .then(response => response.json())
+                .then(data => {
+                    const rates = data.rates;
+                    const currency = Object.keys(rates);
+                    console.log(currency)
+
+                    for (i of currency){
+                        const option = document.createElement('option');
+                        option.innerHTML = i;
+                        option.value = i;
+
+                        document.querySelector('#select').append(option);
+                    }
+
+                    document.querySelector("#select").onchange = () => {
+                        const current = document.querySelector('#select').value;
+                        const val = rates[current];
+
+                        document.querySelector('#rate').innerHTML = `${val}`
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error)                
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Convert USD</h1>
+        The rate of <select id="select"></select> to USD
+        <div id="rate"></div>
+    </body>
+</html>
